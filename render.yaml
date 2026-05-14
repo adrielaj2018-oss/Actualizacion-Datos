@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: actualizacion-datos-trabajadores
+    env: python
+    plan: free
+    buildCommand: python -m pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: APP_TIMEZONE
+        value: America/Lima
+      # IMPORTANTE:
+      # Agrega manualmente DATABASE_URL en Render con la URL interna/externa de PostgreSQL.
+      # Sin DATABASE_URL, el sistema usará SQLite local y NO será persistente en Render Free.
