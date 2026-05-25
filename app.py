@@ -4,7 +4,7 @@ ACTUALIZACION DE DATOS DE TRABAJADORES - PRIZE PRO
 Render/GitHub listo. Sin pandas.
 
 Funcionalidades:
-- Login administrador/operador.
+- Login administrador/operador con permisos por rol.
 - CRUD de usuarios.
 - Carga de base trabajadores Excel.
 - Captura DNI por digitacion, QR/camara o lector codigo de barras.
@@ -324,7 +324,10 @@ body.login-page .content{margin-left:0!important;padding:0;min-height:100vh;posi
 .login-card{width:min(510px,92vw);padding:78px 54px 36px!important;border-radius:32px!important;background:rgba(255,255,255,.91)!important;backdrop-filter:blur(18px);box-shadow:0 26px 70px rgba(15,23,42,.16)!important;position:relative;overflow:visible}
 .login-badge{position:absolute;top:-62px;left:50%;transform:translateX(-50%);width:124px;height:124px;border-radius:999px;background:rgba(255,255,255,.96);display:grid;place-items:center;border:1px solid rgba(226,232,240,.95);box-shadow:0 18px 42px rgba(22,163,74,.18)}
 .login-badge i{font-size:54px;color:#15915d}.login-title{font-size:38px;letter-spacing:.5px;color:#1e293b}.login-sub{font-size:16px;color:#64748b}.login-line{width:54px;height:3px;background:#10b981;border-radius:99px;margin:16px auto 20px}.login-field{position:relative}.login-field i{position:absolute;left:14px;top:43px;width:34px;height:34px;border-radius:10px;background:#ecfdf5;color:#15915d;display:grid;place-items:center}.login-field .form-control{height:58px;padding-left:58px;background:rgba(255,255,255,.92);box-shadow:0 8px 18px rgba(15,23,42,.05)}.login-btn{height:58px;border-radius:14px!important;background:linear-gradient(135deg,#16a34a,#05855f)!important;border:0!important;box-shadow:0 14px 28px rgba(5,133,95,.25);font-size:18px}.login-footer{position:fixed;left:0;right:0;bottom:26px;text-align:center;color:white;z-index:2;text-shadow:0 1px 8px rgba(0,0,0,.18)}.login-footer .secure{font-weight:700;margin-bottom:8px}.login-divider{display:flex;align-items:center;gap:18px;color:#64748b;margin-top:28px}.login-divider:before,.login-divider:after{content:"";height:1px;background:#e5e7eb;flex:1}
-@media(max-width:920px){.sidebar{position:relative;width:100%!important;min-height:auto;bottom:auto;border-radius:0 0 22px 22px}.content{margin-left:0!important;padding:12px}.navMenu{display:flex;overflow:auto;gap:6px}.nav-link{min-width:max-content}.userBox{position:static;margin-top:8px}.brandTitle{display:block!important}.navText{display:inline!important}.navLabel{display:none}.toggleBtn{display:none}body.login-page .content{padding:0}.login-wrap{padding-bottom:78px}.login-wrap:before,.login-wrap:after{display:none}.login-card{padding:72px 22px 26px!important}.login-title{font-size:31px}.login-badge{width:105px;height:105px;top:-52px}.login-badge i{font-size:46px}}
+@media(max-width:920px){
+.sidebar{position:sticky;top:0;width:100%!important;min-height:auto;bottom:auto;border-radius:0 0 22px 22px;padding:8px 8px 10px;z-index:50;box-shadow:0 10px 26px rgba(2,6,23,.18)}
+.content{margin-left:0!important;padding:10px}.logoBox{padding:4px 4px 8px;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.10)}.logoBox img{width:34px;height:34px;border-radius:10px}.brandTitle{display:block!important;font-size:15px}.brandTitle small{font-size:10px}.navMenu{display:flex!important;flex-direction:row!important;overflow-x:auto;overflow-y:hidden;gap:7px;padding:2px 0 4px;white-space:nowrap;-webkit-overflow-scrolling:touch}.navMenu::-webkit-scrollbar{height:0}.nav-link{min-width:max-content;margin:0;padding:10px 12px;border-radius:15px;font-size:13px;gap:7px}.nav-link i{font-size:16px;min-width:17px}.userBox{position:static;margin-top:6px;padding:7px 10px;border-radius:14px;font-size:12px}.navText{display:inline!important}.navLabel{display:none}.toggleBtn{display:none}.topbar{border-radius:18px;padding:12px}.topbar h2{font-size:22px}.card-pro{border-radius:18px}.row.g-4{--bs-gutter-y:12px}.input-group .btn{padding-left:12px;padding-right:12px}
+body.login-page .content{padding:0}.login-wrap{padding-bottom:78px}.login-wrap:before,.login-wrap:after{display:none}.login-card{padding:72px 22px 26px!important}.login-title{font-size:31px}.login-badge{width:105px;height:105px;top:-52px}.login-badge i{font-size:46px}}
 </style></head><body class="{{ ('collapsed ' if session.get('sidebar_collapsed') else '') + ('login-page' if not session.get('usuario') else '') }}">
 {% if session.get('usuario') %}
 <aside class="sidebar">
@@ -339,10 +342,8 @@ body.login-page .content{margin-left:0!important;padding:0;min-height:100vh;posi
     <a class="nav-link {% if active=='captura' %}active{% endif %}" href="{{ url_for('captura') }}"><i class="bi bi-upc-scan"></i><span class="navText">Captura DNI</span></a>
     {% if session.get('rol')=='admin' %}
     <a class="nav-link {% if active=='carga' %}active{% endif %}" href="{{ url_for('cargar_base') }}"><i class="bi bi-file-earmark-excel"></i><span class="navText">Cargar base</span></a>
-    {% endif %}
     <a class="nav-link {% if active=='registros' %}active{% endif %}" href="{{ url_for('registros') }}"><i class="bi bi-table"></i><span class="navText">Registros</span></a>
     <a class="nav-link {% if active=='respaldo' %}active{% endif %}" href="{{ url_for('respaldo') }}"><i class="bi bi-cloud-arrow-down"></i><span class="navText">Respaldo</span></a>
-    {% if session.get('rol')=='admin' %}
     <div class="navLabel">Administrador</div>
     <a class="nav-link {% if active=='usuarios' %}active{% endif %}" href="{{ url_for('usuarios') }}"><i class="bi bi-people"></i><span class="navText">Usuarios</span></a>
     {% endif %}
@@ -497,7 +498,7 @@ def captura():
     function cargarCorreo(c){ c=(c||'').trim().toLowerCase(); if(!c){correo_usuario.value=''; correo_dominio.value='@gmail.com'; correo.value=''; return;} const dominios=['@gmail.com','@hotmail.com','@outlook.com']; const d=dominios.find(x=>c.endsWith(x)) || '@gmail.com'; correo_dominio.value=d; correo_usuario.value=c.replace(d,''); correo.value=correo_usuario.value+d; }
     dniInput.addEventListener('input',()=>{clearTimeout(timer); const d=limpiarDni(dniInput.value); if(d.length>=8){dniInput.value=d; timer=setTimeout(()=>buscarDni('AUTO/LECTOR'),220);}});
     dniInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();buscarDni('DIGITACION');}});
-    function limpiarDni(v){let d=(v||'').replace(/\D/g,''); return d.length>=8?d.slice(-8):d;}
+    function limpiarDni(v){let raw=(v||'').toString(); let m=raw.match(/(?:^|\D)(\d{8})(?:\D|$)/); let d=m?m[1]:raw.replace(/\D/g,''); return d.length>=8?d.slice(-8):d;}
     function mostrar(txt,tipo){const m=document.getElementById('msg'); m.className='alert alert-'+tipo; m.innerText=txt;}
     async function buscarDni(metodo='DIGITACION'){
       if(buscando) return; const dni=limpiarDni(dniInput.value); dniInput.value=dni; document.getElementById('metodo_captura').value=metodo;
@@ -509,8 +510,8 @@ def captura():
       f_dni.value=t.dni||''; trabajador.value=t.trabajador||''; empresa.value=t.empresa||''; area_cargo.value=((t.area||'')+' / '+(t.cargo||'')).replace(/^ \/ | \/ $/g,''); cargarCorreo(a.correo||''); celular.value=a.celular||''; nivel_educacion.value=a.nivel_educacion||''; procedencia_zona.value=a.procedencia_zona||''; indumentaria.value=a.indumentaria||''; tiempo.value=a.tiempo||''; carnet_conadis.value=a.carnet_conadis||''; telefono_emergencia.value=a.telefono_emergencia||''; observacion.value=a.observacion||''; fecha_auto.value=new Date().toLocaleString();
       mostrar((a.correo||a.celular)?'Trabajador encontrado. Ya tiene datos, puede modificarlos.':'Trabajador encontrado. Complete correo y celular.','success'); correo.focus();
     }
-    async function guardarDatos(e){e.preventDefault(); armarCorreo(); const payload={dni:f_dni.value,correo:correo.value,celular:celular.value,observacion:observacion.value.toUpperCase(),nivel_educacion:nivel_educacion.value.toUpperCase(),procedencia_zona:procedencia_zona.value.toUpperCase(),indumentaria:indumentaria.value.toUpperCase(),tiempo:tiempo.value.toUpperCase(),carnet_conadis:carnet_conadis.value.toUpperCase(),telefono_emergencia:telefono_emergencia.value,metodo_captura:metodo_captura.value}; const r=await fetch('/api/guardar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const data=await r.json(); mostrar(data.msg,data.ok?'success':'danger'); if(data.ok) beep();}
-    function limpiar(){document.getElementById('frm').style.display='none'; dniInput.value=''; mostrar('Esperando captura de DNI.','info'); dniInput.focus();}
+    async function guardarDatos(e){e.preventDefault(); armarCorreo(); const payload={dni:f_dni.value,correo:correo.value,celular:celular.value,observacion:observacion.value.toUpperCase(),nivel_educacion:nivel_educacion.value.toUpperCase(),procedencia_zona:procedencia_zona.value.toUpperCase(),indumentaria:indumentaria.value.toUpperCase(),tiempo:tiempo.value.toUpperCase(),carnet_conadis:carnet_conadis.value.toUpperCase(),telefono_emergencia:telefono_emergencia.value,metodo_captura:metodo_captura.value}; const r=await fetch('/api/guardar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const data=await r.json(); mostrar(data.msg,data.ok?'success':'danger'); if(data.ok){beep(); setTimeout(()=>limpiar('Nuevo registro listo. Escanee o digite otro DNI.'),650);} }
+    function limpiar(msj='Esperando captura de DNI.'){document.getElementById('frm').style.display='none'; dniInput.value=''; ['f_dni','trabajador','empresa','area_cargo','correo_usuario','correo','celular','nivel_educacion','procedencia_zona','indumentaria','tiempo','carnet_conadis','telefono_emergencia','observacion','fecha_auto'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';}); mostrar(msj,'info'); dniInput.focus();}
     function iniciarCamara(){document.getElementById('reader').style.display='block'; html5QrCode=new Html5Qrcode('reader'); html5QrCode.start({facingMode:'environment'},{fps:10,qrbox:250},decoded=>{dniInput.value=limpiarDni(decoded); buscarDni('QR/CAMARA'); detenerCamara();}).catch(()=>mostrar('No se pudo activar cámara. Revise permisos del navegador.','warning'));}
     function detenerCamara(){if(html5QrCode){html5QrCode.stop().catch(()=>{}); html5QrCode=null;} document.getElementById('reader').style.display='none';}
     </script>
@@ -593,7 +594,7 @@ def descargar_base_trabajadores():
 
 # ========================= REGISTROS =========================
 @app.route('/registros')
-@login_required
+@admin_required
 def registros():
     q=request.args.get('q','').strip(); desde=request.args.get('desde',''); hasta=request.args.get('hasta','')
     where=[]; params=[]
